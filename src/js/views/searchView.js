@@ -21,7 +21,7 @@ const limitReciptTitle = (title,limit = 17) => {
 const renderRecipe = recipe => {
     const htmlMarkup = `
             <li>
-                <a class="results__link results__link--active" href="${recipe.recipe_id}">
+                <a class="results__link results__link--active" href="#${recipe.recipe_id}">
                     <figure class="results__fig">
                         <img src="${recipe.image_url}" alt="Test">
                     </figure>
@@ -35,8 +35,39 @@ const renderRecipe = recipe => {
     elements.resultList.insertAdjacentHTML('beforeend',htmlMarkup);      
 }
 
-export const clearResults = () => elements.resultList.innerHTML = '';
+const renderButton = (currPage , type) => `
+  <button class="btn-inline results__btn--${type}"  data-goto = ${ type === 'next'? ( currPage + 1) : (currPage - 1) }>
+      <svg class="search__icon">
+          <use href="img/icons.svg#icon-triangle-${type === 'next'?'right':'left'}"></use>
+      </svg>
+      <span>Page ${type === 'next'?currPage + 1 : currPage - 1}</span>
+  </button>
+`;
 
-export const renderResults = recipes => {
-     recipes.forEach(renderRecipe);
+const renderButtons = (page,numOfResult,resultsPerPage) => {
+  const pages = Math.ceil(numOfResult/resultsPerPage);
+  let button;
+  if(page === 1 && pages > 1) {
+    button = renderButton(page,'next');
+  }
+  else if(page < pages) {
+    button = `${renderButton(page,'prev')} ${renderButton(page,'next')}`
+  }
+  else if(page === pages && pages > 1) {
+    button = renderButton(page,'prev');
+  }
+
+  elements.resultsPages.insertAdjacentHTML('afterbegin',button);
+}
+
+export const clearResults = () => {
+  elements.resultList.innerHTML = '';
+  elements.resultsPages.innerHTML = '';
+}
+
+export const renderResults = (recipes , page = 1 , resultsPerPage = 10) => {
+     const start = (page-1)*resultsPerPage;
+     const end   = page*resultsPerPage;
+     recipes.slice(start,end).forEach(renderRecipe);
+     renderButtons(page,recipes.length,resultsPerPage);
 }

@@ -1,7 +1,5 @@
 import axios from "axios";
-
-///http://food2fork.com/api/search 
-/// API KEY e04f185892ab3a1eabf9753a98a74723
+import {apiKey , proxy } from '../config';
 
 export default class Search {
     constructor(query) {
@@ -9,13 +7,12 @@ export default class Search {
     }
 
     async getResults() {
-        const proxy = "https://cors-anywhere.herokuapp.com/";
-        const apiKey = "e04f185892ab3a1eabf9753a98a74723";
         try{
             const res = await axios(`${proxy}http://food2fork.com/api/search?key=${apiKey}&q=${this.query}`);
+            console.log(res);
             this.results = res.data.recipes;
         } catch(error) {
-
+          console.log(error);
         }
         
     }
