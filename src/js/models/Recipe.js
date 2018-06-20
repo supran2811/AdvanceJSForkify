@@ -22,6 +22,8 @@ export default class Recipe {
   parseIngredients() {
     const unitsLong = ['tablespoons','tablespoon','ounces','ounce','teaspoons','teaspoon','cups','pounds'];
     const unitShort = ['tbsp','tbsp','oz','oz','tsp','tsp','cup','pouund'];
+    const units = [...unitShort , 'kg' , 'g'];
+
     this.ingredients = this.ingredients.map(el => {
       let ingredient = el.toLowerCase();
       unitsLong.forEach((unit,i) => {
@@ -31,7 +33,7 @@ export default class Recipe {
       
       const arrIng = ingredient.split(' ');
      
-      const unitIndex = arrIng.findIndex(el2 => unitShort.includes(el2));
+      const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
      
       let objIng;
       if(unitIndex === -1) {
@@ -62,7 +64,7 @@ export default class Recipe {
         objIng = {
           count,
           unit: arrIng[unitIndex],
-          ingredient:arrIng.slice(unitIndex).join(' ')
+          ingredient:arrIng.slice(unitIndex+1).join(' ')
         }
       }
 

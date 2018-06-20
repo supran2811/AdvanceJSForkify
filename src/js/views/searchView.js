@@ -21,7 +21,7 @@ const limitReciptTitle = (title,limit = 17) => {
 const renderRecipe = recipe => {
     const htmlMarkup = `
             <li>
-                <a class="results__link results__link--active" href="#${recipe.recipe_id}">
+                <a class="results__link" href="#${recipe.recipe_id}">
                     <figure class="results__fig">
                         <img src="${recipe.image_url}" alt="Test">
                     </figure>
@@ -58,6 +58,14 @@ const renderButtons = (page,numOfResult,resultsPerPage) => {
   }
 
   elements.resultsPages.insertAdjacentHTML('afterbegin',button);
+}
+
+export const highlightSelectedResult = id => {
+    
+    const el = document.querySelector('.results__link--active');
+    el && el.classList.remove('results__link--active');
+
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active')
 }
 
 export const clearResults = () => {
